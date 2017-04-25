@@ -1,5 +1,5 @@
 -- Autor:  Tobias Denkinger <tobias.denkinger@tu-dresden.de>
--- Benutzung:  Lade diese Datei in ghci mit: `ghci sol01.hs`
+-- Benutzung:  Lade diese Datei in ghci mit: `ghci Sol01.hs`
 
 module Sol01 where
 
