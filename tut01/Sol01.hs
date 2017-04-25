@@ -5,7 +5,8 @@ module Sol01 where
 
 import Prelude hiding (rem, product)
 
--- Übung 1.1
+-- * Übung 1.1
+
 -- | Fakultät der gegebenen Zahl (durch Rekursion)
 fac :: Int -> Int
 fac 0 = 1
@@ -26,7 +27,7 @@ sumFacs' :: Int -> Int -> Int
 sumFacs' n m = sum [fac i | i <- [n .. m]]
 
 
--- Übung 1.2
+-- * Übung 1.2
 
 -- | `i`-te Zahl der Fibonaccifolge (naiv)
 fib :: Int -> Int
@@ -42,7 +43,7 @@ fib' n = go 1 1 n where
   go x y n' = go y (x + y) (n' - 1)
 
 
--- Übung 1.3
+-- * Übung 1.3
 
 -- | Produkt der Zahlen der gegebenen Liste
 prod :: [Int] -> Int
