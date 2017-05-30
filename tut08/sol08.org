@@ -1,0 +1,58 @@
+#+title: Lösungen zum 8. Übungsblatt
+#+date: 2017-05-30
+#+email: tobias.denkinger@tu-dresden.de
+#+options: toc:nil
+
+* Lösung zu Aufgabe 13.10
+
+** C₀ → AM₀
+
+tab = [x/(var, 1) , y/(var, 2) , a/(var, 3)]
+
+#+begin_src
+ 1: READ 2;
+ 2: READ 3;
+ 3: LIT 0;
+ 4: STORE 1;
+ 5: LOAD 1;
+ 6: LOAD 3;
+ 7: LT;
+ 8: JMC 18;
+ 9: LIT 1;
+10: LOAD 1;
+11: ADD;
+12: STORE 1;
+13: LOAD 2;
+14: LOAD 2;
+15: MUL;
+16: STORE 2;
+17: JMP 5;
+18: WRITE 2;
+#+end_src
+
+** AM₀-Ablaufprotokoll
+
+|  BZ |    DK | HS         | inp | out |         |
+| <r> |   <r> | <l>        | <r> | <l> |         |
+|-----+-------+------------+-----+-----+---------|
+|   1 |     ε | []         | 0:1 | ε   | READ 1  |
+|   2 |       | [1/0]      |   1 |     | READ 2  |
+|   3 |       | [1/0, 2/1] |   ε |     | LOAD 1  |
+|   4 |     0 |            |     |     | LOAD 2  |
+|   5 |   1:0 |            |     |     | LIT 0   |
+|   6 | 0:1:0 |            |     |     | SUB     |
+|   7 |   1:0 |            |     |     | JMC 9   |
+|   8 |     0 |            |     |     | JMP 5   |
+|   5 |       |            |     |     | LIT 0   |
+|   6 |   0:0 |            |     |     | SUB     |
+|   7 |     0 |            |     |     | JMC 9   |
+|   9 |     ε |            |     |     | WRITE 2 |
+|  10 |       |            |     | 1   |         |
+
+* Lösung zu Aufgabe 14.2
+
+  siehe Tafel
+
+* Lösung zu Aufgabe 14.18
+
+  siehe Tafel
