@@ -1,0 +1,64 @@
+#+title: Lösungen zum 9. Übungsblatt
+#+date: 2017-06-12 und 2017-06-13
+#+email: tobias.denkinger@tu-dresden.de
+#+options: toc:nil
+
+* Lösungen zu Aufgabe 15.2
+
+** Teilaufgabe a 
+   * SI = (z = (x - x1) ⋅ y) ∧ (x1 ≥ 0)
+   * Π = (x1 > 0)
+ 
+** Teilaufgabe b
+  * A = SI
+  * B = SI ∧ ¬Π
+  * C = SI
+  * D = SI
+  * E = SI ∧ Π
+  * G = SI
+
+* Lösungen zu Aufgabe 15.22
+
+** Teilaufgabe a
+  * SI = (b = a^{n-i}) ∧ (i ≥ 0)
+  * Π = (i > 0)
+
+** Teilaufgabe b
+  * A = SI
+  * B = SI ∧ ¬Π
+  * C = SI
+  * D = SI ∧ Π
+  * E = {b=b*a; i=i-1;}
+
+* Lösungen zu Aufgabe 14.17
+
+** Teilaufgabe a
+
+#+begin_src
+2.2.1:     LOADI(-2); LOAD(lokal, 1); GT;
+           JMC 2.2.2;
+           LOAD(lokal, -2); PUSH; CALL 1;
+           LOAD(lokal, 1); LIT 1; ADD; STORE(lokal, 1);
+           JMP 2.2.1;
+2.2.2,2.3: LOADA(lokal, 1); STORE(lokal, -2); 
+#+end_src
+
+** Teilaufgabe b
+
+|  BZ |  DK | LK             | REF | Inp | Out |                  |
+| <r> | <r> | <l>            | <r> | <r> | <l> |                  |
+|-----+-----+----------------+-----+-----+-----+------------------|
+|  22 |   ε | 1:3:0:1        |   3 |   ε | ε   | LOAD(global,1);  |
+|  23 |   1 |                |     |     |     | PUSH;            |
+|  24 |   ε | 1:3:0:1:1      |     |     |     | CALL 3;          |
+|   3 |     | 1:3:0:1:1:25:3 |   7 |     |     | INIT 0;          |
+|   4 |     |                |     |     |     | LOAD(lokal,-2);  |
+|   5 |   1 |                |     |     |     | LIT 0;           |
+|   6 | 0:1 |                |     |     |     | GT;              |
+|   7 |   1 |                |     |     |     | JMC 17;          |
+|   8 |   ε |                |     |     |     | LIT 2;           |
+|   9 |   2 |                |     |     |     | LOADI(-3);       |
+|  10 | 1:2 |                |     |     |     | MUL;             |
+|  11 |   2 |                |     |     |     | STOREI(-3);      |
+|  12 |   ε | 2:3:0:1:1:25:3 |     |     |     | LOAD(lokal,-2);  |
+|  13 |   1 |                |     |     |     | LIT 1;           |
