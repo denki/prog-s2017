@@ -1,0 +1,140 @@
+#+title: Lösungen zum 11. Übungsblatt
+#+date: 2017-06-27
+#+email: tobias.denkinger@tu-dresden.de
+#+options: toc:nil
+
+* Lösungen zu Aufgabe 15.24
+** Teilaufgabe a
+   * Tabelle:
+     | # | i | z                    |
+     |---+---+----------------------|
+     | 0 | 0 | 1                    |
+     | 1 | 1 | 1²                   |
+     | 2 | 2 | 1²⋅2²                |
+     | 3 | 3 | 1²⋅2²⋅3²             |
+     | ⋮ | ⋮ | ⋮                    |
+     | j | j | ∏_{x=1}^j x² = (j!)² |
+     | ⋮ | ⋮ | ⋮                    |
+     | n | n | ∏_{x=1}^n x² = (n!)² |
+     |   |   |                      |
+   
+   * SI = (z = ∏_{j=1}^i j²) ∧ (i ≤ n)
+
+   * Π = (i < n)
+
+** Teilaufgabe b
+   * A = (n ≥ 0) ∧ (z = 1) ∧ (i = 0) 
+   * B = SI
+   * C = SI
+   * D = SI ∧ ¬Π
+   * E = SI ∧ ¬Π
+   * F = (z = ∏_{j=1}^i j²)
+   * G = SI ∧ Π
+   * H = SI
+
+* Lösungen zu Aufgabe 16.7(b)
+ 
+#+begin_src haskell
+module Main where
+
+f1 :: Int -> Int -> Int
+f1 x1 x2 = f2 x1 1
+
+f2 :: Int -> Int -> Int
+f2 x1 x2 = if x1 > 0 then f21 x1 x2
+                     else f3 x1 x2
+
+f21 :: Int -> Int -> Int
+f21 x1 x2 = f211 x1 x2
+
+f211 :: Int -> Int -> Int
+f211 x1 x2 = f212 x1 (x2 * x1)
+
+f212 :: Int -> Int -> Int
+f212 x1 x2 = f2 (x1 - 1) x2
+
+f3 :: Int -> Int -> Int
+f3 x1 x2 = x2
+
+main = do x1 <- readLn
+          print (f1 x1 0)
+#+end_src
+
+* Lösungen zu Aufgabe 16.25
+** Teilaufgabe a
+
+#+begin_src am0
+h:   LOAD 3; LOAD 1; GT; JMC h.3;
+     LOAD 2; LIT 1; SUB; STORE 1; WRITE 1; JMP 0;
+h.3: LOAD 2; LOAD 1; LOAD 3; SUB; LOAD 2;
+     STORE 3; STORE 2; STORE 1; JMP h; 
+#+end_src
+
+** Teilaufgabe b
+
+#+begin_src c
+// A
+scanf("%d", &x1);
+x1 = 3 + x1;
+x2 = 5;
+flag = 1;
+
+// B
+x2 == x1
+
+// C
+result = 30;
+flag = 0;
+
+// D
+result = x2;
+flag = 0;
+
+// E
+function == 2
+
+// F
+if (10 <= x2) {
+  x1 = x1 - x2;
+  x2 = x2 - 1;
+} else {
+  x1 = x1 + x2;
+  x2 = 10;
+  function = 1;
+}
+#+end_src
+
+* Aufgabe 12.3.8
+
+#+begin_src haskell
+-- IB: Sei t = Leaf i für ein i :: Int.
+sumTree (overlay t t)
+= sumTree (overlay (Leaf i) (Leaf i))
+= sumTree (Leaf (i + i))                       -- (12)
+= i + i                                        -- (4)
+= 2 * i
+= 2 * sumTree (Leaf i)                         -- (4)
+= 2 * sumTree (revTree (Leaf i))               -- (8)
+
+-- IS: Sei t = Branch i t₁ t₂ für ein i :: Int, t₁, t₂ :: Tree sodass (*) für t₁ und t₂ gilt.
+sumTree (overlay (Branch i t₁ t₂) (Branch i t₁ t₂))
+= sumTree (Branch (i + i) (overlay t₁ t₁) (overlay t₂ t₂))     -- (13)
+= i + i + sumTree (overlay t₁ t₁) + sumTree (overlay t₂ t₂)    -- (5)
+= i + i + 2 * sumTree (revTree t₁) + 2 * sumTree (revTree t₂)  -- (IH)
+= 2 * (i + sumTree (revTree t₂) + sumTree (revTree t₁))
+= 2 * sumTree (Branch i (revTree t₂) (revTree t₁))             -- (5)
+= 2 * sumTree (revTree (Branch i t₁ t₂))                       -- (9)
+#+end_src
+
+
+
+
+
+
+
+
+
+
+
+
+
