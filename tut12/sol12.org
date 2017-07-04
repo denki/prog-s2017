@@ -1,0 +1,98 @@
+#+title: Lösungen zum 12. Übungsblatt
+#+date: 2017-07-04
+#+email: tobias.denkinger@tu-dresden.de
+#+options: toc:nil
+
+* Lösung zu Aufgabe 1
+siehe [[file:sol12-1.pl]]
+
+* Lösung zu Aufgabe 2
+SLD-Refutation:
+#+begin_src prolog
+            ?- prod(s(s(0)), s(0), X).
+            ?- prod(s(0), s(0), W)                  , sum(s(0), W, X). % prod2
+            ?- prod(0, s(0), W1) , sum(s(0), W1, W) , sum(s(0), W, X). % prod2
+{W1 = 0}    ?- prod(0, s(0), 0)  , sum(s(0), 0, W)  , sum(s(0), W, X).
+            ?- sum(s(0), 0, W)  , sum(s(0), W, X).                     % prod1
+{W = s(Z1)} ?- sum(0, 0, Z1)    , sum(s(0), s(Z1), X).                 % sum2
+{Z1 = 0}    ?- sum(s(0), s(0), X).                                     % sum1
+{X = s(Z2)} ?- sum(0, s(0), Z2).                                       % sum2
+{Z2 = s(0)} ?-.                                                        % sum1
+#+end_src
+X = s(Z2) = s(s(0))
+
+* Lösung zu Aufgabe 3
+#+begin_src prolog
+prefix([], L) :- is_list(L).               % pre1
+prefix([A|AS], [A|BS]) :- prefix(AS, BS).  % pre2
+#+end_src
+
+SLD-Refutation:
+#+begin_src prolog
+         ?- prefix([a|L], [a,c]).
+         ?- prefix(L, [c]).                % pre2
+{L = []} ?- prefix([], [c]).
+         ?- is_list([c]).                  % pre1
+         ?-.
+
+             ?- prefix([a|L], [a,c]).
+             ?- prefix(L, [c]).            % pre2
+{L = [X|Xs]} ?- prefix([X|Xs], [c]).
+{X = c}      ?- prefix(Xs, []).            % pre2 
+{Xs = []}    ?- is_list([]).               % pre1
+             ?-.
+
+% keine SLD-Refutation:
+          ?- prefix([a|L], [a,c]).
+          ?- prefix(L, [c]).               % pre2
+{L = [x]} ?- prefix([x], [c]).             % nichts anwendbar
+#+end_src
+
+* Lösung zu Aufgabe 16.18
+** Teilaufgabe a
+#+begin_src c
+#include <stdio.h>
+
+int main () {
+  int x1, x2;
+  scanf("%i", &x1);
+  x2 = 1;
+  
+  while (x1 > 0) {
+    x2 = x2 * 2;
+    x1 = x1 - 1;
+  }
+
+  printf("%d", x2);
+  return 0;
+}
+#+end_src
+
+** Teilaufgabe b
+#+begin_src c
+// A
+scanf("%i", &x1);
+x2 = x1;
+function = 1;
+flag = 1;
+
+// B
+x1 > 0
+
+// C
+x1 = x1 - x2;
+x2 = x2 + 1;
+
+// D
+x1 = x2;
+x2 = x2 - 1;
+
+// E
+if (x1 == x2) {
+  result = x1;
+  flag = 0;
+} else {
+  result = x2;
+  flag = 0;
+}
+#+end_src
