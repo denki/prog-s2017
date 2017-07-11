@@ -1,0 +1,160 @@
+#+title: Lösungen zum 13. Übungsblatt
+#+date: 2017-07-01
+#+email: tobias.denkinger@tu-dresden.de
+#+options: toc:nil
+
+* Lösung zu Aufgabe 1
+#+begin_src prolog
+pair(X, Y, [X, Y | _]) :- Y is X + 1.
+pair(X, Y, [_ | L])    :- pair(X, Y, L).
+#+end_src
+
+SLD-Refutation:
+#+begin_src prolog
+           ?- pair(X, Y, [1,2,4,5]).
+{X=1, Y=2} ?- 2 is 1+1.
+           ?-.
+% X=1, Y=2
+
+           ?- pair(X, Y, [1,2,4,5]).
+           ?- pair(X, Y, [2,4,5]).
+           ?- pair(X, Y, [4,5]).
+{X=4, Y=5} ?- 5 is 4+1.
+           ?-.
+% X=4, Y=5
+#+end_src
+
+* Lösung zu Aufgabe 2
+#+begin_src prolog
+subt(X, X).
+subt(S1, s(_, T2)) :- subt(S1, T2).
+subt(S1, s(T1, _)) :- subt(S1, T1).
+#+end_src
+
+** Teilaufgabe a
+SLD-Refutation:
+#+begin_src prolog
+                       ?- subt(s(X, Y), s(s(a, b), s(b, a))).
+{X=s(a, b), Y=s(b, a)} ?-.
+
+                       ?- subt(s(X, Y), s(s(a, b), s(b, a))).
+                       ?- subt(s(X, Y), s(b, a)).
+{X=b, Y=a}             ?-.
+
+                       ?- subt(s(X, Y), s(s(a, b), s(b, a))).
+                       ?- subt(s(X, Y), s(a, b)).
+{X=a, Y=b}             ?-.
+#+end_src
+
+** Teilaufgabe b
+SLD-Refutation:
+#+begin_src prolog
+            ?- subt(s(a, a), X).
+{X=s(a, a)} ?-.
+
+             ?- subt(s(a, a), X).
+{X=s(_, X1)} ?- subt(s(a, a), X1).
+{X1=s(a, a)} ?-.
+% X = s(a, s(a, a))
+
+             ?- subt(s(a, a), X).
+{X=s(X2, _)} ?- subt(s(a, a), X2).
+{X2=s(a, a)} ?-.
+% X = s(s(a, a), c)
+#+end_src
+
+* Lösung zu Aufgabe 12.1.45
+#+begin_src haskell
+-- (a)
+isSubSeqOf :: Eq a => [a] -> [a] -> Bool
+isSubSeqOf [] _ = True
+isSubSeqOf (x:xs) (y:ys)
+  | x == y    = isSubSeqOf xs xy
+  | otherwise = False
+isSubSeqOf _ _ = False
+
+-- (b)
+zipWith :: (a -> b -> c) -> [a] -> [b] -> [c]
+zipWith f (x : xs) (y : ys) = f x y : zipWith f xs ys
+zipWith _ _        _        = []
+
+h :: [Int] -> [Int] -> [Int]
+h xs ys = zipWith (\ x y -> 2 * x + y) xs ys
+
+h [1, 2] [3, 4, 5]
+= zipWith (\ x y -> 2 * x + y) [1, 2] [3, 4, 5]
+= (\x y -> 2 * x + y) 1 3 : zipWith (\x y -> 2 * x + y) [2] [4, 5]
+= 5 : zipWith (\x y -> 2 * x + y) [2] [4, 5]
+= 5 : (\x y -> 2 * x + y) 2 4 : zipWith (\x y -> 2 * x + y) [] [5]
+= 5 : 8 : zipWith (\x y -> 2 * x + y) [] [5]
+= 5 : 8 : []
+= [5, 8]
+
+-- (c)
+data Tree a = Node a [Tree a]
+
+isPathOf :: Eq a => [a] -> Tree a -> Bool
+isPathOf [] _ = True
+isPathOf (x : xs) (Node y ts)
+  = x == y && any (isPathOf xs) ts
+#+end_src
+
+* Lösung zu Aufgabe 12.4.34
+** Teilaufgabe a
+#+begin_src elisp
+   (λxy.yx)(λx.xy)(λx.x)
+      ---- -------
+    GV={y} FV={y}
+
+⇒ₐ (λxy₁.y₁x)(λx.xy)(λx.x)
+
+⇒ᵦ (λy₁.y₁(λx.xy))(λx.x)
+       ---------  -----
+         GV={x}   FV=∅
+
+⇒ᵦ (λx.x)(λx.xy)
+      -- ------
+   GV=∅  FV={y}
+
+⇒ᵦ (λx.xy)
+#+end_src
+
+** Teilaufgabe b
+#+begin_src elisp
+⟨F⟩ = (λfxy. ⟨ite⟩ (⟨iszero⟩(⟨sub⟩xy))
+                   (⟨ite⟩ (⟨iszero⟩(⟨sub⟩yx))
+                          x
+                          (f (⟨pred⟩y) x)
+                   )
+                   (f (⟨pred⟩x) y)
+      )
+#+end_src
+
+** Teilaufgabe c
+#+begin_src elisp
+⟨Y⟩ = (λh.(λy.h(yy))(λy.h(yy)))
+
+⟨Y⟩⟨G⟩ ⇒* ((λy.⟨G⟩(yy))(λy.⟨G⟩(yy))) = ⟨Y_G⟩
+       ⇒* (⟨G⟩((λy.⟨G⟩(yy))(λy.⟨G⟩(yy)))) = ⟨G⟩⟨Y_G⟩
+
+⟨Y⟩⟨G⟩⟨1⟩⟨5⟩⟨4⟩
+
+⇒* ⟨G⟩⟨Y_G⟩⟨1⟩⟨5⟩⟨4⟩
+
+⇒* ⟨ite⟩ (⟨iszero⟩⟨1⟩) ⟨5⟩ (⟨Y_G⟩ (⟨pred⟩⟨1⟩) (⟨mult⟩⟨5⟩⟨4⟩) (⟨pred⟩⟨4⟩))
+         -------------            ----------- -------------- -----------
+          ⇒* ⟨false⟩               ⇒* ⟨0⟩      ⇒* ⟨20⟩        ⇒* ⟨3⟩
+
+⇒* ⟨Y_G⟩⟨0⟩⟨20⟩⟨3⟩
+
+⇒* ⟨G⟩⟨Y_G⟩⟨0⟩⟨20⟩⟨3⟩
+
+⇒* ⟨ite⟩ (⟨iszero⟩⟨0⟩) ⟨20⟩ (…)
+         -------------
+          ⇒* ⟨true⟩
+
+⇒* ⟨20⟩
+#+end_src
+
+* Lösung zu Aufgabe 12.2.8
+siehe Tafel
